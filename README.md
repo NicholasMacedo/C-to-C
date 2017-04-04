@@ -33,11 +33,45 @@
           int a;
           void (*Tstfnsic) ();
       };
-      void Tstfn(struct Tst * sPtrNM,int a, char b){ ... }
+      void Tstfnsic(struct Tst * sPtrNM,int a, char b){ ... }
  ```
  ### Addition of Constructors
- * Due to the removal of the functions from the classes, constructors must be added to initilize the pointers.
+ * Due to the removal of the functions from the classes, constructors must be added to initilize the pointers. Therefore, wherever a class is declaired, a constructor must be placed after.
  
+ **Example**: 
+ 
+ ```
+ class Tst {
+        int a;
+        void fn(int a, char b){ ... }
+ }; 
+ int main () {
+     class Tst myTest;
+     ...
+ }
+ ```
+ 
+ would be converted to: 
+
+ ```
+      struct Tst{
+          int a;
+          void Tstfnsic(*Tstfnsic) ();
+      };
+      void Tstfn(struct Tst * sPtrNM,int a, char b){ ... }
+      void constructorTst(struct Tst * sPtrNM) {
+          sPtrNM->Tstfnsic = &Tstfnsic;
+      }
+      int main () {
+        struct Tst myTest;
+        constructorTst(&myTest);
+        ...
+      }
+ ```
+ * Constructor is formed using the formula: "constructor" + Class Name and sends in the memory address of the class.
+ * The constructor is placed at the end of the functions that were once in the class.
+ 
+ ## Class Function Variables
  
 
 ## Designed Program Restrictions
