@@ -72,12 +72,51 @@
  * The constructor is placed at the end of the functions that were once in the class.
  
  ## Class Function Variables
+ * Class variables that are referenced within a classes functions can be accessed through the sPtrNM that is sent in. The program automatically detects if the variable belongs to the class or not and adds the connection.
  
+ **Example**:
+  ```
+ class Tst {
+        int num;
+        void fn(int a, int b){
+           num = a + b;
+        }
+ }; 
+ int main () {
+     class Tst myTest;
+     int a = 1;
+     int b = 2;
+     myTest.fn(a,b);
+ }
+ ```
+ 
+ would be converted to: 
 
+ ```
+      struct Tst{
+          int num;
+          void Tstfnsii(*Tstfnsii) ();
+      };
+      void Tstfn(struct Tst * sPtrNM,int a, int b){
+        sPtrNM->num = a + b;
+      }
+      void constructorTst(struct Tst * sPtrNM) {
+          sPtrNM->Tstfnsii = &Tstfnsii;
+      }
+      int main () {
+        struct Tst myTest;
+        constructorTst(&myTest);
+        int a = 1;
+        int b = 2;
+        myTest.Tstfnsii(&myTest,a,b);
+      }
+ ```
+ 
 ## Designed Program Restrictions
 * Variables within the class are static only. Not Dynamic. (EG: int a; NOT int * a;)
 * Double Variable Types (EG: long long, long double, long int)
 * Class function calls inside of another class function.
 * Struct variables as a function argument of another function. (EG: myA.add(myA.x,myA.y))
 * Function calls inside of a function call. (EG: myA.add(myA.geta(),myA.getb()))
+* function calls must contain a variable and not literals. (EG: myA.add(num1,num2) NOT myA.add(3,2)) 
 * Variable declarations and assignments within a class. (EG: int a = 1)
